@@ -1,24 +1,19 @@
-<form action ="input-siswa.php" method="POST">
-            <label for="nis"> Nomor Induk Siswa :</label>
-            <input type="number" name="nis" placeholder="Ex.121002101" /> <br>
-
-            <label for="nama"> Nama lengkap :</label>
-            <input type="text" name="nama" placeholder="EX.Kingjuan" > <br>
-            
-            <label for="tanggal_lahir">Tanggal Lahir :</label>
-            <input type="date" name="tanggal_lahir" /> <br>
-
-            <label for="nilai"> Nilai:</label>
-             <input type="number" name="nilai" placeholder="Ex. 80.56" /> <br>
-
-                <input type="submit" name="simpan" value="simpan data" />
-                <input type="Reset" name="reset" value="reset" />
-</form>
-
 <?php
-        echo "<hr>";    
+        
         include('./input-config.php');
+        if ($_SESSION["login"] != TRUE) {
+            header('location:Login.php');
+        }
 
+         echo "<hr>"; 
+         echo "Selamat Datang, " . $_SESSION["username"] . "<br>";
+         echo "Anda Sebagai, " . $_SESSION["role"];
+         echo " - ";
+         echo "<a href='logout.php'>Logout</a>";
+         echo " - ";
+         echo "<a href='input-datadiri-tambah.php'>Tambah Data</a>";
+
+         // READ - Menampilkan data dari database
         $no = 1;
         $tabledata = "";
         $data = mysqli_query($mysqli," SELECT * FROM datadiri " );
@@ -29,6 +24,14 @@
                         <td>".$row["namalengkap"]."</td>
                         <td>".$row["tanggal_lahir"]."</td>
                         <td>".$row["nilai"]."</td>
+                        <td>
+                                <a href='input-datadiri-edit.php?nis=".$row["nis"]."'>Edit</a>
+                                &nbsp;-&nbsp;
+                                <a href='input-datadiri-hapus.php?nis=".$row["nis"]."'
+                                onclick='return confirm(\"Yakin Dek ?\");'>Hapus</a>
+
+
+                        </td>       
                     </tr>
                 ";
                 $no++;
@@ -42,9 +45,10 @@
                         <th>Nama lengkap</th>
                         <th>Tanggal Lahir</th>
                         <th>NIlai</th>
+                        <th>Aksi</th>
                     </tr>
                     $tabledata
                 </table>
         
-        "
+        ";
 ?>
